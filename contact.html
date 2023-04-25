@@ -22,6 +22,8 @@
     <link rel="stylesheet" href="css/magnific-popup.css" type="text/css">
     <link rel="stylesheet" href="css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="css/style.css" type="text/css">
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
 <body>
@@ -150,14 +152,15 @@
                 <div class="col-lg-6 col-md-6">
                     <div class="contact__form">
                         <h3>Get in touch</h3>
-                        <form action="#">
-                            <input type="text" placeholder="Name">
-                            <input type="text" placeholder="Email">
-                            <input type="text" placeholder="Website">
-                            <textarea placeholder="Message"></textarea>
+                        <form id="myForm" action="https://formspree.io/f/meqwvvgg" method="POST" target="_blank">
+                            <input type="text" placeholder="Name" name="Name">
+                            <input type="text" placeholder="Email" name="Email">
+                            <input type="text" placeholder="Mobile" name="Mobile">
+                            <textarea placeholder="Message" name="Message"></textarea>
                             <button type="submit" class="site-btn">Send Message</button>
                         </form>
                     </div>
+                    <div id="form-status" class="mt-3"></div>
                 </div>
             </div>
         </div>
@@ -252,6 +255,50 @@
     <!-- Footer Section End -->
 
     <!-- Js Plugins -->
+    <script>
+        $(function() {
+          $("#myForm").submit(function(event) {
+            event.preventDefault();
+      
+            var formData = $(this).serialize();
+            var url = "https://formspree.io/f/meqwvvgg";
+      
+            $.ajax({
+              type: "POST",
+              url: url,
+              data: formData,
+              dataType: "json",
+            //   success: function(data) {
+            //     $("#myForm")[0].reset();
+            //     $("#form-status").text("Thanks for submitting the form!");
+            //   },
+            success: function(data) {
+          $("#myForm")[0].reset();
+          $("#form-status").text("Thanks for submitting the form! we will get in touch with you soon").removeClass("error-message").addClass("success-message");
+          setTimeout(function() {
+            $("#form-status").fadeOut("slow");
+          }, 3000);
+        },
+            //   error: function(xhr, status, error) {
+            //     console.log(xhr);
+            //     console.log(status);
+            //     console.log(error);
+            //     $("#form-status").text("There was an error submitting the form. Please try again later.");
+            //   }
+            error: function(xhr, status, error) {
+          console.log(xhr);
+          console.log(status);
+          console.log(error);
+          $("#form-status").text("There was an error submitting the form. Please try again later.").removeClass("success-message").addClass("error-message");
+          setTimeout(function() {
+            $("#form-status").fadeOut("slow");
+          }, 3000);
+        }
+            });
+          });
+        });
+      </script>
+   
     <script src="js/jquery-3.3.1.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/jquery.magnific-popup.min.js"></script>
